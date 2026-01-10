@@ -1,0 +1,33 @@
+{
+    "gem_name": "Blast",
+    "version": "1.0.0",
+    "display_name": "NVIDIA Blast",
+    "license": "Apache-2.0",
+    "license_url": "",
+    "origin": "Ross Charles C.",
+    "origin_url": "",
+    "type": "Code",
+    "summary": "Enables support for NVIDIA Blast objects in Lumberyard for high-fidelity destruction.",
+    "canonical_tags": [
+        "Gem"
+    ],
+    "user_tags": [
+        "Physics","Blast"
+    ],
+    "platforms": [
+        ""
+    ],
+    "icon_path": "",
+    "requirements": "",
+    "documentation_url": "",
+    "dependencies": [
+        "Atom_Feature_Common",
+        "CommonFeaturesAtom",
+        "Atom_RPI"
+    ],
+    "repo_uri": "",
+    "compatible_engines": [
+    ],
+    "engine_api_dependencies":[
+    ]
+}

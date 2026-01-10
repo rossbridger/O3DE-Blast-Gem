@@ -1,0 +1,6 @@
+{
+    "PackageName": "Blast-v5.0.6-rev1-windows",
+    "URL": "https://github.com/NVIDIA-Omniverse/PhysX.git",
+    "License": "custom",
+    "LicenseFile": "Blast/license.txt"
+}

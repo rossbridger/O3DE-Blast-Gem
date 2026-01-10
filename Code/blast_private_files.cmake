@@ -1,0 +1,40 @@
+
+set(FILES
+    Source/BlastModuleInterface.cpp
+    Source/BlastModuleInterface.h
+	Source/Actor/BlastActorDesc.h
+    Source/Actor/BlastActorFactory.h
+    Source/Actor/BlastActorFactory.cpp
+    Source/Actor/BlastActorImpl.h
+    Source/Actor/BlastActorImpl.cpp
+    Source/Asset/BlastAsset.h
+    Source/Asset/BlastAsset.cpp
+    Source/Asset/BlastAssetHandler.h
+    Source/Asset/BlastAssetHandler.cpp
+    Source/Asset/BlastChunksAsset.h
+    Source/Asset/BlastChunksAsset.cpp
+    Source/Components/BlastFamilyComponent.h
+    Source/Components/BlastFamilyComponent.cpp
+    Source/Components/BlastFamilyComponentNotificationBusHandler.h
+    Source/Components/BlastFamilyComponentNotificationBusHandler.cpp
+    Source/Components/BlastSystemComponent.cpp
+    Source/Components/BlastSystemComponent.h
+    Source/Family/ActorRenderManager.h
+    Source/Family/ActorRenderManager.cpp
+    Source/Family/ActorTracker.h
+    Source/Family/ActorTracker.cpp
+    Source/Family/BlastFamily.h
+    Source/Family/BlastFamily.cpp
+    Source/Family/DamageManager.h
+    Source/Family/DamageManager.cpp
+    Source/Common/BlastChunkData.cpp
+    Source/Common/BlastChunkData.h
+    Source/Common/BlastInterfaces.h
+    Source/Common/Utils.h
+    Source/Material/BlastMaterial.h
+    Source/Material/BlastMaterial.cpp
+    Source/Material/BlastMaterialAsset.h
+    Source/Material/BlastMaterialAsset.cpp
+    Source/Material/BlastMaterialConfiguration.h
+    Source/Material/BlastMaterialConfiguration.cpp
+)

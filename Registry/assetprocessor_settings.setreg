@@ -1,0 +1,38 @@
+{
+    "Amazon": {
+        "AssetProcessor": {
+          "Settings": {
+            "RC Blast Asset": {
+              "glob": "*.blast",
+              "params": "copy",
+              "productAssetType": "{5BBFE65A-B2F7-4752-A12A-8B44A07D88EB}"
+            },
+            "RC blastmaterial": {
+              "glob": "*.blastmaterial",
+              "params": "copy",
+              "critical": true,
+              "productAssetType": "{BA261DAC-2B87-4461-833B-914FD9020BD8}"
+            },
+            "RC blastconfiguration": {
+              "glob": "*.blastconfiguration",
+              "params": "copy"
+            },
+            "RC blastchunks": {
+              "glob": "*.blastchunks",
+              "params": "copy",
+              "productAssetType": "{993F0B0F-37D9-48C6-9CC2-E27D3F3E343E}"
+            },
+            "ScanFolder Blast/Assets": {
+              "watch": "@GEMROOT:Blast@/Assets",
+              "recursive": 1,
+              "order": 101
+            },
+            "ScanFolder Blast/Registry": {
+              "watch": "@GEMROOT:Blast@/Registry",
+              "recursive": 1,
+              "order": 102
+            }
+          }
+        }
+    }
+}
