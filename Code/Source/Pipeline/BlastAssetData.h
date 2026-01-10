@@ -19,7 +19,7 @@ namespace Blast
 
 			const NvBlastAsset* GetAssetData() const;
 			void SetAssetData(const NvBlastAsset* data);
-			void AppendCollisionHull(const AZStd::vector<AZStd::vector<AZ::Vector3>>& collisionHull);
+			void AppendCollisionHull(const AZStd::vector<AZStd::vector<AZ::Vector3>> collisionHull);
 			void CloneAttributesFrom([[maybe_unused]] const IGraphObject* sourceObject) override {}
 
 			const size_t GetCollisionHullCount() const;

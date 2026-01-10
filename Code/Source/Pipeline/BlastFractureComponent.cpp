@@ -436,14 +436,7 @@ namespace Blast
 					AZ_Info("Blast", "Fracture result: %u chunks", result->chunkCount);
 					AZStd::unique_ptr<BlastAssetData> assetData = AZStd::make_unique<BlastAssetData>();
 					assetData->SetAssetData(result->asset);
-					const AZStd::string assetName = AZStd::string::format("%s_%s_blast",
-						graph.GetNodeName(nodeIndex).GetName(),
-						meshGroup.GetName().c_str());
-					const NodeIndex blastAssetNodeIndex =
-						graph.AddChild(graph.GetNodeParent(nodeIndex), assetName.c_str(), AZStd::move(assetData));
 
-					unfracturedPropertyMap[FracturedMeshPropertyMapKey] =
-						AZStd::make_any<NodeIndex>(blastAssetNodeIndex);
 					for (uint32_t chunkIndex = 0; chunkIndex < result->chunkCount; ++chunkIndex)
 					{
 						AZStd::unique_ptr<MeshData> chunkMesh = AZStd::make_unique<MeshData>();
@@ -503,6 +496,15 @@ namespace Blast
 						}
 						assetData->AppendCollisionHull(collisionHull);
 					}
+
+					const AZStd::string assetName = AZStd::string::format("%s_%s_blast",
+						graph.GetNodeName(nodeIndex).GetName(),
+						meshGroup.GetName().c_str());
+					const NodeIndex blastAssetNodeIndex =
+						graph.AddChild(graph.GetNodeParent(nodeIndex), assetName.c_str(), AZStd::move(assetData));
+
+					unfracturedPropertyMap[FracturedMeshPropertyMapKey] =
+						AZStd::make_any<NodeIndex>(blastAssetNodeIndex);
 
 					bondGenerator->release();
 					fractureTool->release();

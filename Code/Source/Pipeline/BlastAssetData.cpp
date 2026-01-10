@@ -27,7 +27,7 @@ namespace Blast
 			m_assetData = static_cast<NvBlastAsset*>(azmalloc(assetSize, 16));
 			memcpy(m_assetData, assetData, assetSize);
         }
-		void BlastAssetData::AppendCollisionHull(const AZStd::vector<AZStd::vector<AZ::Vector3>>& collisionHull)
+		void BlastAssetData::AppendCollisionHull(AZStd::vector<AZStd::vector<AZ::Vector3>> collisionHull)
 		{
 			m_collisionHulls.push_back(collisionHull);
 		}

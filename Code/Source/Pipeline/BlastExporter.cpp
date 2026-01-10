@@ -20,6 +20,7 @@
 #include <SceneAPI/SceneCore/Containers/Views/SceneGraphChildIterator.h>
 #include <SceneAPI/SceneCore/DataTypes/GraphData/IMaterialData.h>
 #include <SceneAPI/SceneData/Rules/CoordinateSystemRule.h>
+#include <SceneAPI/SceneData/GraphData/CustomPropertyData.h>
 
 #include <NvBlastExtAuthoringMesh.h>
 
@@ -33,6 +34,16 @@
 #include <Asset/BlastAssetHandler.h>
 #include <AzCore/Serialization/Utils.h>
 #include <PhysX/MeshAsset.h>
+#include <AzCore/std/any.h>
+
+
+using AZ::SceneAPI::Containers::SceneGraph;
+using AZ::SceneAPI::DataTypes::IMeshData;
+using AZ::SceneAPI::DataTypes::ICustomPropertyData;
+using AZ::SceneAPI::Events::ProcessingResult;
+using NodeIndex = AZ::SceneAPI::Containers::SceneGraph::NodeIndex;
+namespace Containers = AZ::SceneAPI::Containers;
+namespace Views = Containers::Views;
 
 namespace Blast
 {
@@ -107,7 +118,43 @@ namespace Blast
                     [&](const AZStd::string& name)
                     {
                         AZ::SceneAPI::Containers::SceneGraph::NodeIndex nodeIndex = graph.Find(name);
-                        auto blastNode = azrtti_cast<const BlastAssetData*>(*graph.ConvertToStorageIterator(nodeIndex));
+
+                        NodeIndex customPropertyIndex =
+                            AZ::SceneAPI::Utilities::GetImmediateChildOfType(graph, nodeIndex, azrtti_typeid<ICustomPropertyData>());
+
+                        if (!customPropertyIndex.IsValid())
+                        {
+                            return true;
+                        }
+
+                        const ICustomPropertyData* customPropertyDataNode =
+                            azrtti_cast<const ICustomPropertyData*>(graph.GetNodeContent(customPropertyIndex).get());
+
+                        const ICustomPropertyData::PropertyMap& propertyMap = customPropertyDataNode->GetPropertyMap();
+
+                        AZ::SceneAPI::Containers::SceneGraph::NodeIndex blastNodeIndex;
+
+                        constexpr const char* FracturedMeshPropertyMapKey = "o3de_fractured_mesh_node";
+                        // Now look up the fractured index
+                        auto iter = propertyMap.find(FracturedMeshPropertyMapKey);
+                        if (iter != propertyMap.end())
+                        {
+                            const auto& [key, fracturedAnyIndex] = *iter;
+                            if (!fracturedAnyIndex.empty() && fracturedAnyIndex.is<NodeIndex>())
+                            {
+                                blastNodeIndex = AZStd::any_cast<NodeIndex>(fracturedAnyIndex);
+                            }
+                            else
+                            {
+                                return true;
+                            }
+                        }
+                        else
+                        {
+                            return true;
+                        }
+
+                        auto blastNode = azrtti_cast<const BlastAssetData*>(*graph.ConvertToStorageIterator(blastNodeIndex));
 
                         if (!blastNode)
                         {
