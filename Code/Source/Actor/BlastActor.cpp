@@ -6,7 +6,6 @@
  *
  */
 
-#include <Actor/BlastActorImpl.h>
 #include <AzCore/Math/Transform.h>
 #include <AzFramework/Physics/PhysicsSystem.h>
 #include <AzFramework/Physics/Shape.h>
@@ -14,7 +13,7 @@
 #include <AzFramework/Physics/Utils.h>
 #include <AzFramework/Physics/Material/PhysicsMaterialManager.h>
 #include <AzFramework/Physics/Configuration/StaticRigidBodyConfiguration.h>
-#include <Blast/BlastActor.h>
+#include <Actor/BlastActor.h>
 #include <Family/BlastFamily.h>
 #include <NvBlastTkActor.h>
 #include <NvBlastTkAsset.h>
@@ -22,7 +21,7 @@
 
 namespace Blast
 {
-    BlastActorImpl::BlastActorImpl(const BlastActorDesc& desc)
+    BlastActor::BlastActor(const BlastActorDesc& desc)
         : m_family(*desc.m_family)
         , m_tkActor(*desc.m_tkActor)
         , m_chunkIndices(desc.m_chunkIndices)
@@ -35,12 +34,13 @@ namespace Blast
         Spawn(desc);
     }
 
-    BlastActorImpl::~BlastActorImpl()
+    BlastActor::~BlastActor()
     {
+        BlastActorRequestBus::Handler::BusDisconnect();
         m_tkActor.userData = nullptr;
     }
 
-    void BlastActorImpl::Spawn(const BlastActorDesc& desc)
+    void BlastActor::Spawn(const BlastActorDesc& desc)
     {
         AzPhysics::SimulatedBodyConfiguration* bodyConfiguration = desc.m_bodyConfiguration.get();
         bodyConfiguration->m_entityId = m_entity->GetId();
@@ -75,9 +75,11 @@ namespace Blast
         auto sceneHandle = sceneInterface->GetSceneHandle(AzPhysics::DefaultPhysicsSceneName);
         AzPhysics::SimulatedBodyHandle simulatedBodyHandle = sceneInterface->AddSimulatedBody(sceneHandle, bodyConfiguration);
         m_simulatedBody = sceneInterface->GetSimulatedBodyFromHandle(sceneHandle, simulatedBodyHandle);
+
+        BlastActorRequestBus::Handler::BusConnect(m_entity->GetId());
     }
 
-    AZStd::vector<AZStd::shared_ptr<Physics::Shape>> BlastActorImpl::AddShapes(
+    AZStd::vector<AZStd::shared_ptr<Physics::Shape>> BlastActor::AddShapes(
         const AZStd::vector<uint32_t>& chunkIndices, const Nv::Blast::TkAsset& asset,
         const AZ::Data::Asset<Physics::MaterialAsset>& physicsMaterialAsset, float scale)
     {
@@ -117,7 +119,7 @@ namespace Blast
         return shapes;
     }
 
-    Physics::ColliderConfiguration BlastActorImpl::CalculateColliderConfiguration(
+    Physics::ColliderConfiguration BlastActor::CalculateColliderConfiguration(
         const AZ::Transform& transform, const AZ::Data::Asset<Physics::MaterialAsset>& physicsMaterialAsset)
     {
         auto& actorConfiguration = m_family.GetActorConfiguration();
@@ -135,47 +137,47 @@ namespace Blast
         return colliderConfiguration;
     }
 
-    AZ::Transform BlastActorImpl::GetTransform() const
+    AZ::Transform BlastActor::GetTransform() const
     {
         return GetSimulatedBody()->GetTransform();
     }
 
-    const BlastFamily& BlastActorImpl::GetFamily() const
+    const BlastFamily& BlastActor::GetFamily() const
     {
         return m_family;
     }
 
-    const Nv::Blast::TkActor& BlastActorImpl::GetTkActor() const
+    const Nv::Blast::TkActor& BlastActor::GetTkActor() const
     {
         return m_tkActor;
     }
 
-    AzPhysics::SimulatedBody* BlastActorImpl::GetSimulatedBody()
+    AzPhysics::SimulatedBody* BlastActor::GetSimulatedBody()
     {
         return m_simulatedBody;
     }
 
-    const AzPhysics::SimulatedBody* BlastActorImpl::GetSimulatedBody() const
+    const AzPhysics::SimulatedBody* BlastActor::GetSimulatedBody() const
     {
         return m_simulatedBody;
     }
 
-    const AZStd::vector<uint32_t>& BlastActorImpl::GetChunkIndices() const
+    const AZStd::vector<uint32_t>& BlastActor::GetChunkIndices() const
     {
         return m_chunkIndices;
     }
 
-    bool BlastActorImpl::IsStatic() const
+    bool BlastActor::IsStatic() const
     {
         return m_isStatic;
     }
 
-    const AZ::Entity* BlastActorImpl::GetEntity() const
+    const AZ::Entity* BlastActor::GetEntity() const
     {
         return m_entity.get();
     }
 
-    void BlastActorImpl::Damage(const NvBlastDamageProgram& program, NvBlastExtProgramParams* programParams)
+    void BlastActor::Damage(const NvBlastDamageProgram& program, NvBlastExtProgramParams* programParams)
     {
         m_tkActor.damage(program, programParams);
     }

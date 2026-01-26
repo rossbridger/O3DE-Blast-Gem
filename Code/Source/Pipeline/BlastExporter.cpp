@@ -89,34 +89,22 @@ namespace Blast
             const SceneContainers::SceneManifest& manifest = context.GetScene().GetManifest();
 
             SceneContainers::SceneManifest::ValueStorageConstData valueStorage = manifest.GetValueStorage();
-            auto view = SceneContainers::MakeExactFilterView<MeshGroup>(valueStorage);
+            auto view = SceneContainers::MakeDerivedFilterView<MeshGroup>(valueStorage);
 
             for (const MeshGroup& blastMeshGroup : view)
             {
-                // Export data per node
-                AZStd::vector<Nv::Blast::Mesh*> totalExportData;
-
                 const AZStd::string& groupName = blastMeshGroup.GetName();
 
                 AZ_TraceContext("Group Name", groupName);
 
                 const auto& sceneNodeSelectionList = blastMeshGroup.GetSceneNodeSelectionList();
 
-                // Get the coordinate system conversion rule.
-                AZ::SceneAPI::CoordinateSystemConverter coordSysConverter;
-                AZStd::shared_ptr<AZ::SceneAPI::SceneData::CoordinateSystemRule> coordinateSystemRule =
-                    blastMeshGroup.GetRuleContainerConst().FindFirstByType<AZ::SceneAPI::SceneData::CoordinateSystemRule>();
-                if (coordinateSystemRule)
-                {
-                    coordinateSystemRule->UpdateCoordinateSystemConverter();
-                    coordSysConverter = coordinateSystemRule->GetCoordinateSystemConverter();
-                }
-
                 SceneEvents::ProcessingResult enumerationResult = SceneEvents::ProcessingResult::Success;
 
                 sceneNodeSelectionList.EnumerateSelectedNodes(
                     [&](const AZStd::string& name)
                     {
+                        AZ_Info(AZ::SceneAPI::Utilities::LogWindow, "Blast: Exporting from node %s", name.c_str());
                         AZ::SceneAPI::Containers::SceneGraph::NodeIndex nodeIndex = graph.Find(name);
 
                         NodeIndex customPropertyIndex =
@@ -189,11 +177,6 @@ namespace Blast
                                 AZStd::move(filename), productUuid, AZ::AzTypeInfo<BlastAsset>::Uuid(), AZStd::nullopt, AZStd::nullopt);
                         }
 
-                        // CoordinateSystemConverter covers the simple transformations of CoordinateSystemRule and
-                        // DetermineWorldTransform function covers the advanced mode of CoordinateSystemRule.
-                        const AZ::SceneAPI::DataTypes::MatrixType worldTransform = coordSysConverter.ConvertMatrix3x4(
-                            AZ::SceneAPI::Utilities::DetermineWorldTransform(scene, nodeIndex, blastMeshGroup.GetRuleContainerConst()));
-
                         // write mesh data
                         for (size_t i = 0; i < blastNode->GetCollisionHullCount(); ++i)
                         {
@@ -234,14 +217,6 @@ namespace Blast
                 if (enumerationResult == SceneEvents::ProcessingResult::Failure)
                 {
                     return enumerationResult;
-                }
-
-                if (!totalExportData.empty())
-                {
-                    for (Nv::Blast::Mesh* mesh : totalExportData)
-                    {
-                        mesh->release();
-                    }
                 }
             }
             return result.GetResult();

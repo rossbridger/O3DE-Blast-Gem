@@ -11,7 +11,7 @@
 #include <AzCore/Math/Vector3.h>
 #include <AzCore/std/containers/unordered_set.h>
 #include <AzCore/std/containers/unordered_map.h>
-#include <Blast/BlastActor.h>
+#include <Actor/BlastActor.h>
 
 namespace Blast
 {

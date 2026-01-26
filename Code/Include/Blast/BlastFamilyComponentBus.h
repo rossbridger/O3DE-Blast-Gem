@@ -12,13 +12,10 @@
 #include <AzCore/std/containers/vector.h>
 #include <AzFramework/Asset/SimpleAsset.h>
 
-#include <Blast/BlastActorData.h>
 #include <Blast/BlastDebug.h>
 
 namespace Blast
 {
-    class BlastActor;
-
     //! Bus that handles damage being dealt to the actors in the  family.
     //! For convenience family connects on its own id as well as all entities that represent blast actors.
     //! If the damage is applied on family id then it's applied to all appropriate actors (which might be limited to
@@ -83,7 +80,7 @@ namespace Blast
         //! @param blastActor Actor to apply damage on.
         //! @param position The global position of the damage's hit.
         //! @param force The impulse applied at the position.
-        virtual void StressDamage(const BlastActor& blastActor, const AZ::Vector3& position, const AZ::Vector3& force) = 0;
+        virtual void StressDamage(const AZ::EntityId actor, const AZ::Vector3& position, const AZ::Vector3& force) = 0;
 
         //! Destroys actor. This is not similar to damage, because the actor is not split into child actors, but rather
         //! just removed from simulation. This method still triggers notifications. Calling this on a family id will
@@ -99,10 +96,7 @@ namespace Blast
     public:
         //! Get a list of all actors of this family
         //! The pointers in the vector are guaranteed to be valid.
-        virtual AZStd::vector<const BlastActor*> GetActors() = 0;
-
-        //! Same as GetActors but for script canvas exposure.
-        virtual AZStd::vector<BlastActorData> GetActorsData() = 0;
+        virtual AZStd::vector<AZ::EntityId> GetActors() const = 0;
 
         //! Fill debug render buffer with debug visualization data based on debug mode.
         virtual void FillDebugRenderBuffer(DebugRenderBuffer& debugRenderBuffer, DebugRenderMode debugRenderMode) = 0;
@@ -126,11 +120,11 @@ namespace Blast
 
         //! Called when BlastFamily creates a new actor.
         //! @param actor The newly created actor.
-        virtual void OnActorCreated(const BlastActor& actor) = 0;
+        virtual void OnActorCreated(AZ::EntityId actor) = 0;
 
         //! Called before a BlastFamily destroys an actor.
         //! @param actor The actor to be destroyed.
-        virtual void OnActorDestroyed(const BlastActor& actor) = 0;
+        virtual void OnActorDestroyed(AZ::EntityId actor) = 0;
     };
     using BlastFamilyComponentNotificationBus = AZ::EBus<BlastFamilyComponentNotifications>;
 } // namespace Blast

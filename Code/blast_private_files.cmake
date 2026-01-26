@@ -5,8 +5,8 @@ set(FILES
 	Source/Actor/BlastActorDesc.h
     Source/Actor/BlastActorFactory.h
     Source/Actor/BlastActorFactory.cpp
-    Source/Actor/BlastActorImpl.h
-    Source/Actor/BlastActorImpl.cpp
+    Source/Actor/BlastActor.h
+    Source/Actor/BlastActor.cpp
     Source/Asset/BlastAsset.h
     Source/Asset/BlastAsset.cpp
     Source/Asset/BlastAssetHandler.h

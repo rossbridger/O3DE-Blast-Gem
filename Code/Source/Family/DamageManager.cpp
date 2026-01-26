@@ -10,7 +10,7 @@
 
 #include <AzFramework/Physics/PhysicsScene.h>
 
-#include <Blast/BlastActor.h>
+#include <Actor/BlastActor.h>
 #include <Blast/BlastSystemBus.h>
 #include <Family/ActorTracker.h>
 #include <Family/BlastFamily.h>

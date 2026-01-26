@@ -7,25 +7,43 @@
  */
 #pragma once
 
-#include <Blast/BlastActor.h>
-#include <Actor/BlastActorDesc.h>
+
+#include <AzCore/Component/Entity.h>
+#include <AzCore/Memory/SystemAllocator.h>
+#include <AzCore/std/containers/vector.h>
 #include <AzFramework/Physics/Material/PhysicsMaterialAsset.h>
+
+#include <NvBlastExtDamageShaders.h>
+#include <NvBlastTypes.h>
+
+#include <Blast/BlastActorBus.h>
+#include <Actor/BlastActorDesc.h>
+
+namespace AzPhysics
+{
+    struct SimulatedBody;
+}
+
+namespace AZ
+{
+    class Transform;
+}
 
 namespace Nv::Blast
 {
+    class TkActor;
     class TkAsset;
 } // namespace Nv::Blast
 
 namespace Blast
 {
     //! Provides the glue between Blast actors and the PhysX actors they manipulate.
-    class BlastActorImpl : public BlastActor
+    class BlastActor : public BlastActorRequestBus::Handler
     {
     public:
-        AZ_CLASS_ALLOCATOR(BlastActorImpl, AZ::SystemAllocator, 0);
-
-        BlastActorImpl(const BlastActorDesc& desc);
-        ~BlastActorImpl();
+        AZ_CLASS_ALLOCATOR(BlastActor, AZ::SystemAllocator, 0);
+        BlastActor(const BlastActorDesc& desc);
+        ~BlastActor();
 
         void Damage(const NvBlastDamageProgram& program, NvBlastExtProgramParams* programParams) override;
 

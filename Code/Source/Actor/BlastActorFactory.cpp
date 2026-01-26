@@ -8,7 +8,7 @@
 
 #include <Actor/BlastActorFactory.h>
 
-#include <Actor/BlastActorImpl.h>
+#include <Actor/BlastActor.h>
 #include <Family/BlastFamily.h>
 #include <NvBlastTkActor.h>
 #include <NvBlastTkAsset.h>
@@ -17,7 +17,7 @@ namespace Blast
 {
     BlastActor* BlastActorFactory::CreateActor(const BlastActorDesc& desc)
     {
-        auto actor = aznew BlastActorImpl(desc);
+        auto actor = aznew BlastActor(desc);
         return actor;
     }
 

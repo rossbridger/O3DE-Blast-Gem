@@ -467,7 +467,7 @@ namespace Blast
 							meshGroup.GetName().c_str(),
 							chunkIndex);
 						const NodeIndex chunkMeshNodeIndex =
-							graph.AddChild(graph.GetNodeParent(nodeIndex), chunkName.c_str(), AZStd::move(chunkMesh));
+							graph.AddChild(nodeIndex, chunkName.c_str(), AZStd::move(chunkMesh));
                         // Insert a mesh group into manifest
 						auto chuckMeshGroup = AZStd::make_shared<AZ::SceneAPI::SceneData::MeshGroup>();
 						chuckMeshGroup->SetName(chunkName);
@@ -501,7 +501,7 @@ namespace Blast
 						graph.GetNodeName(nodeIndex).GetName(),
 						meshGroup.GetName().c_str());
 					const NodeIndex blastAssetNodeIndex =
-						graph.AddChild(graph.GetNodeParent(nodeIndex), assetName.c_str(), AZStd::move(assetData));
+						graph.AddChild(nodeIndex, assetName.c_str(), AZStd::move(assetData));
 
 					unfracturedPropertyMap[FracturedMeshPropertyMapKey] =
 						AZStd::make_any<NodeIndex>(blastAssetNodeIndex);

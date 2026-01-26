@@ -11,7 +11,7 @@
 #include <Asset/BlastAsset.h>
 #include <AzCore/Memory/SystemAllocator.h>
 #include <AzCore/std/containers/unordered_set.h>
-#include <Blast/BlastActor.h>
+#include <Actor/BlastActor.h>
 #include <Blast/BlastActorConfiguration.h>
 #include <Blast/BlastDebug.h>
 #include <Material/BlastMaterial.h>

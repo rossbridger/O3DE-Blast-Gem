@@ -20,7 +20,7 @@
 #include <AzFramework/Physics/Collision/CollisionEvents.h>
 #include <AzFramework/Physics/Common/PhysicsTypes.h>
 #include <AzFramework/Physics/Material/PhysicsMaterialManager.h>
-#include <Blast/BlastActor.h>
+#include <Actor/BlastActor.h>
 #include <Blast/BlastSystemBus.h>
 #include <Material/BlastMaterial.h>
 #include <Common/Utils.h>
@@ -55,9 +55,7 @@ namespace Blast
 
     void BlastFamilyComponent::Reflect(AZ::ReflectContext* context)
     {
-        BlastFamilyComponentNotificationBusHandler::Reflect(context);
         BlastActorConfiguration::Reflect(context);
-        BlastActorData::Reflect(context);
         BlastAsset::Reflect(context);
 
         if (AZ::SerializeContext* serialize = azrtti_cast<AZ::SerializeContext*>(context))
@@ -138,12 +136,20 @@ namespace Blast
                 ->Attribute(AZ::Script::Attributes::Scope, AZ::Script::Attributes::ScopeFlags::Common)
                 ->Attribute(AZ::Script::Attributes::Module, "destruction")
                 ->Attribute(AZ::Script::Attributes::Category, "Blast")
-                ->Event("Get Actors Data", &BlastFamilyComponentRequests::GetActorsData);
+                ->Event("Get Actors", &BlastFamilyComponentRequests::GetActors);
 
             behaviorContext->Class<BlastFamilyComponent>()
                 ->Attribute(AZ::Script::Attributes::Scope, AZ::Script::Attributes::ScopeFlags::Common)
                 ->RequestBus("BlastFamilyDamageRequestBus")
                 ->RequestBus("BlastFamilyComponentRequestBus");
+
+            behaviorContext->EBus<BlastFamilyComponentNotificationBus>("BlastFamilyComponentNotificationBus")
+                ->Attribute(AZ::Script::Attributes::Module, "destruction")
+                ->Attribute(AZ::Script::Attributes::Category, "Blast")
+                ->Attribute(AZ::Script::Attributes::Scope, AZ::Script::Attributes::ScopeFlags::Common)
+                ->Handler<BlastFamilyComponentNotificationBusHandler>()
+                ->Event("On Actor Created", &BlastFamilyComponentNotificationBus::Events::OnActorCreated)
+                ->Event("On Actor Destroyed", &BlastFamilyComponentNotificationBus::Events::OnActorDestroyed);
         }
     }
 
@@ -168,24 +174,14 @@ namespace Blast
     {
     }
 
-    AZStd::vector<const BlastActor*> BlastFamilyComponent::GetActors()
+    AZStd::vector<AZ::EntityId> BlastFamilyComponent::GetActors() const
     {
-        AZStd::vector<const BlastActor*> actors(
-            m_family->GetActorTracker().GetActors().begin(), m_family->GetActorTracker().GetActors().end());
-        return actors;
-    }
-
-    AZStd::vector<BlastActorData> BlastFamilyComponent::GetActorsData()
-    {
-        const AZStd::unordered_set<BlastActor*>& familyActors = m_family->GetActorTracker().GetActors();
-
-        AZStd::vector<BlastActorData> actors;
-        actors.reserve(familyActors.size());
-        for (const auto* actor : familyActors)
+        AZStd::vector<AZ::EntityId> actors;
+        actors.reserve(m_family->GetActorTracker().GetActors().size());
+        for (const auto* actor : m_family->GetActorTracker().GetActors())
         {
-            actors.emplace_back(*actor);
+            actors.push_back(actor->GetEntity()->GetId());
         }
-
         return actors;
     }
 
@@ -423,6 +419,11 @@ namespace Blast
         }
     }
 
+    void BlastFamilyComponent::StressDamage(const AZ::EntityId actor, const AZ::Vector3& position, const AZ::Vector3& force)
+    {
+        StressDamage(*m_family->GetActorTracker().GetActorById(actor), position, force);
+    }
+
     void BlastFamilyComponent::StressDamage(
         const BlastActor& blastActor, const AZ::Vector3& position, const AZ::Vector3& force)
     {
@@ -589,13 +590,13 @@ namespace Blast
         }
         BlastFamilyDamageRequestBus::MultiHandler::BusConnect(actor.GetEntity()->GetId());
         BlastFamilyComponentNotificationBus::Event(
-            GetEntityId(), &BlastFamilyComponentNotifications::OnActorCreated, actor);
+            GetEntityId(), &BlastFamilyComponentNotifications::OnActorCreated, actor.GetEntity()->GetId());
     }
 
     void BlastFamilyComponent::OnActorDestroyed([[maybe_unused]] const BlastFamily& family, const BlastActor& actor)
     {
         BlastFamilyComponentNotificationBus::Event(
-            GetEntityId(), &BlastFamilyComponentNotifications::OnActorDestroyed, actor);
+            GetEntityId(), &BlastFamilyComponentNotifications::OnActorDestroyed, actor.GetEntity()->GetId());
         BlastFamilyDamageRequestBus::MultiHandler::BusDisconnect(actor.GetEntity()->GetId());
 
         if (CollisionHandlersMapItr foundHandler = m_collisionHandlers.find(actor.GetEntity()->GetId());

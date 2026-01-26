@@ -8,10 +8,8 @@
 #pragma once
 
 #include <AzCore/std/containers/unordered_map.h>
-#include <AzCore/std/smart_ptr/unique_ptr.h>
 #include <Asset/BlastAsset.h>
 #include <AzCore/Component/Component.h>
-#include <AzCore/Component/TickBus.h>
 #include <AzCore/Asset/AssetCommon.h>
 #include <AzFramework/Physics/Common/PhysicsSimulatedBodyEvents.h>
 #include <AzFramework/Physics/Material/PhysicsMaterialAsset.h>
@@ -92,12 +90,12 @@ namespace Blast
             float damage) override;
         void ImpactSpreadDamage(const AZ::Vector3& position, float minRadius, float maxRadius, float damage) override;
         void StressDamage(const AZ::Vector3& position, const AZ::Vector3& force) override;
-        void StressDamage(const BlastActor& blastActor, const AZ::Vector3& position, const AZ::Vector3& force) override;
+        void StressDamage(const AZ::EntityId actor, const AZ::Vector3& position, const AZ::Vector3& force) override;
         void DestroyActor() override;
 
         // BlastFamilyComponentRequestBus overrides ...
-        AZStd::vector<const BlastActor*> GetActors() override;
-        AZStd::vector<BlastActorData> GetActorsData() override;
+        AZStd::vector<AZ::EntityId> GetActors() const override;
+
         void FillDebugRenderBuffer(DebugRenderBuffer& debugRenderBuffer, DebugRenderMode debugRenderMode) override;
         void ApplyStressDamage() override;
         void SyncMeshes() override;
@@ -114,6 +112,8 @@ namespace Blast
 
         // Dispatched when two shapes start colliding.
         void OnCollisionBegin(const AzPhysics::CollisionEvent& collisionEvent);
+
+        void StressDamage(const BlastActor& blastActor, const AZ::Vector3& position, const AZ::Vector3& force);
 
         // Logic processors
         AZStd::unique_ptr<DamageManager> m_damageManager;

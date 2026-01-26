@@ -18,7 +18,6 @@
 #include <AzCore/Asset/AssetSerializer.h>
 #include <AzCore/Serialization/EditContext.h>
 #include <AzCore/Serialization/SerializeContext.h>
-#include <Blast/BlastActorData.h>
 #include <Blast/BlastDebug.h>
 #include <Blast/BlastFamilyComponentBus.h>
 #include <Material/BlastMaterialAsset.h>
@@ -250,7 +249,7 @@ namespace Blast
         AzFramework::StringFunc::Path::Join(assetRoot, DefaultConfigurationPath, fullPath);
 
         [[maybe_unused]] bool saved = AZ::Utils::SaveObjectToFile<BlastGlobalConfiguration>(
-            fullPath.c_str(), AZ::DataStream::ST_XML, &m_configuration);
+            fullPath.c_str(), AZ::DataStream::ST_JSON, &m_configuration);
         AZ_Warning("BlastSystemComponent", saved, "Failed to save Blast configuration");
     }
 

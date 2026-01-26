@@ -7,7 +7,7 @@
  */
 
 #include <AtomLyIntegration/CommonFeatures/Material/MaterialComponentBus.h>
-#include <Blast/BlastActor.h>
+#include <Actor/BlastActor.h>
 #include <Common/BlastChunkData.h>
 #include <Family/ActorRenderManager.h>
 

@@ -8,7 +8,7 @@
 #pragma once
 
 #include <Actor/BlastActorDesc.h>
-#include <Blast/BlastActor.h>
+#include <Actor/BlastActor.h>
 
 namespace Blast
 {

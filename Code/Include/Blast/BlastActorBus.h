@@ -7,40 +7,22 @@
  */
 #pragma once
 
-#include <AzCore/Component/Entity.h>
-#include <AzCore/Memory/SystemAllocator.h>
-#include <AzCore/std/containers/vector.h>
-
-#include <NvBlastExtDamageShaders.h>
-#include <NvBlastTypes.h>
+#include <AzCore/Component/ComponentBus.h>
+#include <AzCore/EBus/EBus.h>
 
 namespace AzPhysics
 {
     struct SimulatedBody;
 }
 
-namespace AZ
-{
-    class Transform;
-}
-
-namespace Nv::Blast
-{
-    class TkActor;
-} // namespace Nv::Blast
-
 namespace Blast
 {
     class BlastFamily;
 
-    //! Represents a part of the destructed object by holding a reference to an entity with a rigid body.
-    class BlastActor
+    class BlastActorRequests
+        : public AZ::ComponentBus
     {
     public:
-        AZ_CLASS_ALLOCATOR(BlastActor, AZ::SystemAllocator);
-
-        virtual ~BlastActor() = default;
-
         // Applies pending damage to the actor. Actual damage will be simulated by BlastSystemComponent.
         virtual void Damage(const NvBlastDamageProgram& program, NvBlastExtProgramParams* programParams) = 0;
 
@@ -53,4 +35,5 @@ namespace Blast
         virtual const AZStd::vector<uint32_t>& GetChunkIndices() const = 0;
         virtual bool IsStatic() const = 0;
     };
-} // namespace Blast
+    using BlastActorRequestBus = AZ::EBus<BlastActorRequests>;
+}
