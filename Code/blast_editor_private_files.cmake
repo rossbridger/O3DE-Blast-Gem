@@ -4,16 +4,6 @@ set(FILES
     Source/Editor/EditorBlastFamilyComponent.cpp
     Source/Editor/EditorSystemComponent.h
     Source/Editor/EditorSystemComponent.cpp
-    Source/Pipeline/BlastAssetData.cpp
-    Source/Pipeline/BlastAssetData.h
-    Source/Pipeline/MeshGroup.cpp
-    Source/Pipeline/MeshGroup.h
-    Source/Pipeline/MeshBehavior.cpp
-	Source/Pipeline/MeshBehavior.h
-    Source/Pipeline/BlastExporter.cpp
-    Source/Pipeline/BlastExporter.h
-    Source/Pipeline/BlastFractureComponent.cpp
-    Source/Pipeline/BlastFractureComponent.h
     Editor/ConfigurationWidget.h
     Editor/ConfigurationWidget.cpp
     Editor/EditorWindow.h

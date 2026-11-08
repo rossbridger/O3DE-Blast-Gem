@@ -8,7 +8,6 @@
 
 #include <AzCore/Component/ComponentApplicationBus.h>
 #include <AzToolsFramework/UI/PropertyEditor/InstanceDataHierarchy.h>
-#include <AzToolsFramework/UI/PropertyEditor/ReflectedPropertyEditor.hxx>
 #include <Editor/SettingsWidget.h>
 #include <QBoxLayout>
 
@@ -67,5 +66,3 @@ namespace Blast
         void SettingsWidget::SealUndoStack() {}
     } // namespace Editor
 } // namespace Blast
-
-#include <Editor/moc_SettingsWidget.cpp>

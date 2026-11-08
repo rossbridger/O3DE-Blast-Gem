@@ -52,4 +52,3 @@ namespace Blast
         }
     } // namespace Editor
 } // namespace Blast
-#include <Editor/moc_EditorWindow.cpp>

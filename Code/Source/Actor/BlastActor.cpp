@@ -25,7 +25,6 @@ namespace Blast
         : m_family(*desc.m_family)
         , m_tkActor(*desc.m_tkActor)
         , m_chunkIndices(desc.m_chunkIndices)
-        , m_isLeafChunk(desc.m_isLeafChunk)
         , m_isStatic(desc.m_isStatic)
     {
         // Store pointer to ourselves in the blast toolkit actor's userData

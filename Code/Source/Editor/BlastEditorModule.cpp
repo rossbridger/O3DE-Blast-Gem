@@ -2,9 +2,6 @@
 #include <BlastModuleInterface.h>
 #include <Editor/EditorBlastFamilyComponent.h>
 #include <Editor/EditorSystemComponent.h>
-#include <Pipeline/MeshBehavior.h>
-#include <Pipeline/BlastExporter.h>
-#include <Pipeline/BlastFractureComponent.h>
 
 namespace Blast
 {
@@ -24,9 +21,6 @@ namespace Blast
             m_descriptors.insert(m_descriptors.end(), {
                 EditorSystemComponent::CreateDescriptor(),
                 EditorBlastFamilyComponent::CreateDescriptor(),
-                Pipeline::MeshBehavior::CreateDescriptor(),
-                Pipeline::BlastExporter::CreateDescriptor(),
-                Pipeline::BlastFractureComponent::CreateDescriptor(),
             });
         }
 

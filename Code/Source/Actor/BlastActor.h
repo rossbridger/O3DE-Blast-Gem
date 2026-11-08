@@ -73,7 +73,6 @@ namespace Blast
 
         AZStd::shared_ptr<AZ::Entity> m_entity;
         AZStd::vector<uint32_t> m_chunkIndices;
-        bool m_isLeafChunk;
         bool m_isStatic;
 
         AzPhysics::SimulatedBody* m_simulatedBody = nullptr;

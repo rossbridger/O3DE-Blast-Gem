@@ -8,11 +8,14 @@
 
 #pragma once
 
-#if !defined(Q_MOC_RUN)
-#include <AzToolsFramework/UI/PropertyEditor/PropertyEditorAPI_Internals.h>
+#include <AzToolsFramework/UI/PropertyEditor/ReflectedPropertyEditor.hxx>
 #include <QWidget>
 #include <Blast/BlastSystemBus.h>
-#endif
+
+namespace AzToolFramework
+{
+    class ReflectedPropertyEditor;
+}
 
 namespace Blast
 {
