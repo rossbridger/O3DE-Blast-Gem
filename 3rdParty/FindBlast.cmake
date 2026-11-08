@@ -53,5 +53,15 @@ ly_target_include_system_directories(TARGET ${TARGET_WITH_NAMESPACE} INTERFACE $
 target_link_libraries(${TARGET_WITH_NAMESPACE} INTERFACE ${${MY_NAME}_LIBRARIES})
 target_compile_definitions(${TARGET_WITH_NAMESPACE} INTERFACE ${${MY_NAME}_COMPILE_DEFINITIONS})
 
+    # install the libraries making sure to use different directories for debug/release/etc
+set(BASE_LIBRARY_FOLDER "lib/${PAL_PLATFORM_NAME}")
+foreach(conf IN LISTS CMAKE_CONFIGURATION_TYPES)
+    string(TOUPPER ${conf} UCONF)
+    ly_install(FILES ${${MY_NAME}_LIBRARIES}
+            DESTINATION "${BASE_LIBRARY_FOLDER}/${conf}"
+            COMPONENT ${LY_INSTALL_PERMUTATION_COMPONENT}_${UCONF}
+            CONFIGURATIONS ${conf}
+    )
+endforeach()
 
 set(${MY_NAME}_FOUND True)

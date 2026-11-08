@@ -10,6 +10,7 @@
 #include <AzCore/Serialization/SerializeContext.h>
 #include <Editor/EditorSystemComponent.h>
 #include <Editor/EditorWindow.h>
+#include <FracturingTool/FracturingToolWindow.h>
 #include <DebugDraw/DebugDrawBus.h>
 #include <AzFramework/Asset/GenericAssetHandler.h>
 
@@ -46,6 +47,7 @@ namespace Blast
     void EditorSystemComponent::NotifyRegisterViews()
     {
         Blast::Editor::EditorWindow::RegisterViewClass();
+        Blast::Editor::FracturingToolWindow::RegisterViewClass();
     }
     void Blast::EditorSystemComponent::OnTick(float deltaTime, AZ::ScriptTimePoint time)
     {

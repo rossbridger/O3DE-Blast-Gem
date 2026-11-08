@@ -11,4 +11,6 @@ set(FILES
     Editor/EditorWindow.ui
     Editor/SettingsWidget.h
     Editor/SettingsWidget.cpp
+    FracturingTool/FracturingToolWindow.h
+    FracturingTool/FracturingToolWindow.cpp
 )
