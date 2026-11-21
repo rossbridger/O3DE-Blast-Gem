@@ -168,14 +168,23 @@ namespace Blast
                         memcpy(assetBuffer.data(), buffer, size);
                         NVBLAST_FREE(buffer);
 
+                        // Products must be unique per selected node, so only disambiguate when the group exports several nodes.
                         AZStd::string assetName = blastMeshGroup.GetName();
+                        AZStd::string productIdName = blastMeshGroup.GetId().ToString<AZStd::string>();
+                        if (sceneNodeSelectionList.GetSelectedNodeCount() > 1)
+                        {
+                            AZStd::string nodeSuffix = name;
+                            AZ::StringFunc::Replace(nodeSuffix, '.', '_');
+                            assetName += "_" + nodeSuffix;
+                            productIdName += "_" + name;
+                        }
+
                         AZStd::string filename = SceneUtil::FileUtilities::CreateOutputFileName(
                             assetName, context.GetOutputDirectory(), BlastAssetHandler::s_assetFileExtension, context.GetScene().GetSourceExtension());
                         // writes blast asset to the file
                         if (AZ::Utils::SaveStreamToFile(filename, assetBuffer))
                         {
-                            AZStd::string productUuidString = blastMeshGroup.GetId().ToString<AZStd::string>();
-                            AZ::Uuid productUuid = AZ::Uuid::CreateName(productUuidString);
+                            AZ::Uuid productUuid = AZ::Uuid::CreateName(productIdName);
                             context.GetProductList().AddProduct(
                                 AZStd::move(filename), productUuid, AZ::AzTypeInfo<BlastAsset>::Uuid(), AZStd::nullopt, AZStd::nullopt);
                         }
@@ -206,8 +215,7 @@ namespace Blast
 
                             if (WriteCookedMeshToFile(chunkFilename, assetData))
                             {
-                                AZStd::string productUuidString = blastMeshGroup.GetId().ToString<AZStd::string>();
-                                AZ::Uuid productUuid = AZ::Uuid::CreateName(productUuidString);
+                                AZ::Uuid productUuid = AZ::Uuid::CreateName(productIdName + AZStd::string::format("_chunk%zu", i));
 
                                 context.GetProductList().AddProduct(
                                     AZStd::move(chunkFilename), productUuid, AZ::AzTypeInfo<PhysX::Pipeline::MeshAsset>::Uuid(), AZStd::nullopt, AZStd::nullopt);
