@@ -13,11 +13,9 @@ if (TARGET ${TARGET_WITH_NAMESPACE})
 endif()
 
 set(_PACKAGE_DIR ${CMAKE_CURRENT_LIST_DIR}/Blast)
-if ($<LOWER_CASE:$<CONFIG>> STREQUAL "RELEASE")
-    set(${MY_NAME}_LIBRARY_DIR ${_PACKAGE_DIR}/release/bin)
-else()
-    set(${MY_NAME}_LIBRARY_DIR ${_PACKAGE_DIR}/debug/bin)
-endif()
+# The configuration is only known at generation time, so pick the library folder with a generator expression.
+# Profile builds use the release libraries.
+set(${MY_NAME}_LIBRARY_DIR ${_PACKAGE_DIR}/$<IF:$<CONFIG:debug>,debug,release>/bin)
 
 set(${MY_NAME}_INCLUDE_DIR ${_PACKAGE_DIR}/include/extensions/assetutils
                            ${_PACKAGE_DIR}/include/extensions/authoring
@@ -43,9 +41,17 @@ set(IMPORTED_BLAST_LIBS_SUFFIX
 )
 
 set(${MY_NAME}_LIBRARIES "")
+set(${MY_NAME}_RUNTIME_DEPENDENCIES "")
 foreach(BLAST_LIB ${IMPORTED_BLAST_LIBS_SUFFIX})
-    list(APPEND ${MY_NAME}_LIBRARIES
-        ${${MY_NAME}_LIBRARY_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}${BLAST_LIB}${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(_shared_lib ${${MY_NAME}_LIBRARY_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}${BLAST_LIB}${CMAKE_SHARED_LIBRARY_SUFFIX})
+    # Platforms with import libraries (Windows) link against the .lib and load the .dll at runtime.
+    if(CMAKE_IMPORT_LIBRARY_SUFFIX)
+        list(APPEND ${MY_NAME}_LIBRARIES
+            ${${MY_NAME}_LIBRARY_DIR}/${CMAKE_IMPORT_LIBRARY_PREFIX}${BLAST_LIB}${CMAKE_IMPORT_LIBRARY_SUFFIX})
+    else()
+        list(APPEND ${MY_NAME}_LIBRARIES ${_shared_lib})
+    endif()
+    list(APPEND ${MY_NAME}_RUNTIME_DEPENDENCIES ${_shared_lib})
 endforeach()
 
 add_library(${TARGET_WITH_NAMESPACE} INTERFACE IMPORTED GLOBAL)
@@ -53,11 +59,24 @@ ly_target_include_system_directories(TARGET ${TARGET_WITH_NAMESPACE} INTERFACE $
 target_link_libraries(${TARGET_WITH_NAMESPACE} INTERFACE ${${MY_NAME}_LIBRARIES})
 target_compile_definitions(${TARGET_WITH_NAMESPACE} INTERFACE ${${MY_NAME}_COMPILE_DEFINITIONS})
 
+# Copy the shared libraries next to the executables that load the gem.
+ly_add_target_files(TARGETS ${TARGET_WITH_NAMESPACE} FILES ${${MY_NAME}_RUNTIME_DEPENDENCIES})
+
     # install the libraries making sure to use different directories for debug/release/etc
 set(BASE_LIBRARY_FOLDER "lib/${PAL_PLATFORM_NAME}")
 foreach(conf IN LISTS CMAKE_CONFIGURATION_TYPES)
     string(TOUPPER ${conf} UCONF)
-    ly_install(FILES ${${MY_NAME}_LIBRARIES}
+    string(TOLOWER ${conf} LCONF)
+    if(LCONF STREQUAL "debug")
+        set(_conf_dir debug)
+    else()
+        set(_conf_dir release)
+    endif()
+    set(_conf_libraries "")
+    foreach(BLAST_LIB ${IMPORTED_BLAST_LIBS_SUFFIX})
+        list(APPEND _conf_libraries ${_PACKAGE_DIR}/${_conf_dir}/bin/${CMAKE_SHARED_LIBRARY_PREFIX}${BLAST_LIB}${CMAKE_SHARED_LIBRARY_SUFFIX})
+    endforeach()
+    ly_install(FILES ${_conf_libraries}
             DESTINATION "${BASE_LIBRARY_FOLDER}/${conf}"
             COMPONENT ${LY_INSTALL_PERMUTATION_COMPONENT}_${UCONF}
             CONFIGURATIONS ${conf}

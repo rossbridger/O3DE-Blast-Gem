@@ -7,7 +7,11 @@
  */
 
 #include <Asset/BlastChunksAsset.h>
+#include <AzCore/Name/Name.h>
 #include <AzCore/Serialization/SerializeContext.h>
+#include <Atom/RPI.Public/RPISystemInterface.h>
+#include <Atom/RPI.Public/Scene.h>
+#include <Blast/BlastFamilyComponentBus.h>
 #include <Editor/EditorSystemComponent.h>
 #include <Editor/EditorWindow.h>
 #include <FracturingTool/FracturingToolWindow.h>

@@ -14,6 +14,7 @@
 #include <AzFramework/Physics/Material/PhysicsMaterialManager.h>
 #include <AzFramework/Physics/Configuration/StaticRigidBodyConfiguration.h>
 #include <Actor/BlastActor.h>
+#include <Common/BlastChunkData.h>
 #include <Family/BlastFamily.h>
 #include <NvBlastTkActor.h>
 #include <NvBlastTkAsset.h>

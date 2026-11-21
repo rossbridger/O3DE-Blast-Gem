@@ -12,7 +12,7 @@ namespace Blast
 			: public AZ::SceneAPI::DataTypes::IGraphObject
 		{
 		public:
-			AZ_TYPE_INFO(BlastAssetData, "{127463AF-6F7A-4329-92B5-1D6CF25CA3B8}");
+			AZ_RTTI(BlastAssetData, "{127463AF-6F7A-4329-92B5-1D6CF25CA3B8}", AZ::SceneAPI::DataTypes::IGraphObject);
 
 			BlastAssetData() = default;
 			virtual ~BlastAssetData();

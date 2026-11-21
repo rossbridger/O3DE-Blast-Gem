@@ -23,7 +23,9 @@
     "dependencies": [
         "Atom_Feature_Common",
         "CommonFeaturesAtom",
-        "Atom_RPI"
+        "Atom_RPI",
+        "DebugDraw",
+        "PhysX5"
     ],
     "repo_uri": "",
     "compatible_engines": [

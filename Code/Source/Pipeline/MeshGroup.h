@@ -141,7 +141,7 @@ namespace Blast
             bool m_cleanMesh = false;
             bool m_replaceChunk = false;
             AZ::s32 m_seed = 0;
-            FractureMethod m_fractureMethod;
+            FractureMethod m_fractureMethod = FractureMethod::Island;
             VoronoiParams m_voronoiParams;
             ClusteredVoronoiParams m_clusteredVoronoiParams;
             SlicingParams m_slicingParams;
