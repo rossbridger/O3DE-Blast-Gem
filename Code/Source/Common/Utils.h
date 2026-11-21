@@ -7,6 +7,8 @@
  */
 #pragma once
 
+#include <AzCore/Math/Quaternion.h>
+#include <AzCore/Math/Vector2.h>
 #include <AzCore/Math/Vector3.h>
 #include <NvBlastGlobals.h>
 
@@ -19,7 +21,7 @@ namespace Blast
 
     inline NvcVec2 Convert(const AZ::Vector2 azVec2)
     {
-        return NvcVec2(azVec2.GetX(), azVec2.GetY());
+        return NvcVec2{ azVec2.GetX(), azVec2.GetY() };
     }
 
     inline AZ::Vector3 Convert(const NvcVec3 nvcVec3)
@@ -29,11 +31,11 @@ namespace Blast
 
     inline NvcVec3 Convert(const AZ::Vector3 azVec3)
     {
-        return NvcVec3(azVec3.GetX(), azVec3.GetY(), azVec3.GetZ());
+        return NvcVec3{ azVec3.GetX(), azVec3.GetY(), azVec3.GetZ() };
     }
 
     inline NvcQuat Convert(const AZ::Quaternion azQuat)
     {
-        return NvcQuat(azQuat.GetX(), azQuat.GetY(), azQuat.GetZ(), azQuat.GetW());
+        return NvcQuat{ azQuat.GetX(), azQuat.GetY(), azQuat.GetZ(), azQuat.GetW() };
     }
 } // namespace Blast

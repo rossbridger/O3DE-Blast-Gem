@@ -30,6 +30,9 @@
 
 #include <AzCore/std/smart_ptr/make_shared.h>
 #include <NvBlastExtTkSerialization.h>
+#include <NvBlastTkAsset.h>
+#include <NvBlastTkFramework.h>
+#include <Asset/BlastAsset.h>
 #include <Blast/BlastSystemBus.h>
 #include <Asset/BlastAssetHandler.h>
 #include <AzCore/Serialization/Utils.h>

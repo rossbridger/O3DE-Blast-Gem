@@ -16,7 +16,7 @@
 #include <AtomLyIntegration/CommonFeatures/Mesh/MeshComponentBus.h>
 #include <Components/BlastFamilyComponent.h>
 #include <Atom/RPI.Public/Scene.h>
-#include <API/ToolsApplicationAPI.h>
+#include <AzToolsFramework/API/ToolsApplicationAPI.h>
 #include <Editor/EditorBlastFamilyComponent.h>
 
 namespace Blast

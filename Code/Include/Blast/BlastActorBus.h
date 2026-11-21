@@ -9,10 +9,25 @@
 
 #include <AzCore/Component/ComponentBus.h>
 #include <AzCore/EBus/EBus.h>
+#include <AzCore/Math/Transform.h>
+#include <AzCore/std/containers/vector.h>
+
+#include <NvBlastExtDamageShaders.h>
+#include <NvBlastTypes.h>
 
 namespace AzPhysics
 {
     struct SimulatedBody;
+}
+
+namespace Nv::Blast
+{
+    class TkActor;
+} // namespace Nv::Blast
+
+namespace AZ
+{
+    class Entity;
 }
 
 namespace Blast

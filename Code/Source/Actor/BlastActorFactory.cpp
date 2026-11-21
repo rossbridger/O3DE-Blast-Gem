@@ -9,6 +9,7 @@
 #include <Actor/BlastActorFactory.h>
 
 #include <Actor/BlastActor.h>
+#include <Common/BlastChunkData.h>
 #include <Family/BlastFamily.h>
 #include <NvBlastTkActor.h>
 #include <NvBlastTkAsset.h>
